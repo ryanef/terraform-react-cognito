@@ -1,0 +1,109 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "huigui",
+    "version" : "2024-05-10T15:53:22Z"
+  },
+
+  "paths" : {
+    "/user" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Empty"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "cognitoauth" : [ "aws.cognito.signin.user.admin" ]
+        } ],
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : "${uri}",
+          "responses" : {
+            "default" : {
+              "statusCode" : "200"
+            }
+          },
+          "passthroughBehavior" : "when_no_match",
+          "contentHandling" : "CONVERT_TO_TEXT",
+          "type" : "aws_proxy"
+        }
+      },
+      "options" : {
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Empty"
+                }
+              }
+            }
+          }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "200",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Methods" : "'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT'",
+                "method.response.header.Access-Control-Allow-Headers" : "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{\"statusCode\": 200}"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Empty" : {
+        "title" : "Empty Schema",
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : {
+      "cognitoauth" : {
+        "type" : "apiKey",
+        "name" : "Authorization",
+        "in" : "header",
+        "x-amazon-apigateway-authtype" : "cognito_user_pools",
+        "x-amazon-apigateway-authorizer" : {
+          "providerARNs" : [ "${user_pool_arn}" ],
+          "type" : "cognito_user_pools"
+        }
+      }
+    }
+  }
+}

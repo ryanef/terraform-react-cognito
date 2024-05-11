@@ -1,0 +1,9 @@
+**/**/*.tfstate
+**/**/*.tfstate.backup
+**/**/*.zip
+**/**/*.env
+**/**/*.env.*
+**/**/.terraform
+**/**/*.tfvars
+**/**/dist
+**/**/node_modules
